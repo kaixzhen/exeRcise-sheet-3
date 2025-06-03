@@ -306,11 +306,13 @@ year:
 df_adult_obesity_rates <- read_csv("data/adult_obesity.csv") %>%
   janitor::clean_names() %>%
   rename(
-    adult_obesity_rate = prevalence_of_obesity_in_adults_18_years_old_fao_2017
+    adult_obesity_rate = prevalence_of_obesity_in_adults_18_years_old_fao_2017,
+    region = entity
   )
 
 df_adult_obesity_rates_2014 <- df_adult_obesity_rates %>%
-  filter(year == 2014)
+  filter(year == 2014) %>%
+  arrange(adult_obesity_rate)
 ```
 
 The region(s) with the highest adult obesity rates in 2014 were North America
@@ -325,6 +327,27 @@ significant impact on adult obesity rates.
 f)  Create a meaningful plot / figure with the dataset. Make sure to
     provide a figure caption (via the chunk options / Rmarkdown) and
     correctly label the figure.
+    
+```{r fig.cap="Barplot of adult obesity rates in each region in 2014"}
+ggplot(
+  data = df_adult_obesity_rates_2014 %>%
+    filter(region != "World"),
+  mapping = aes(
+    x = reorder(region, adult_obesity_rate),
+    y = adult_obesity_rate
+  )
+) +
+  geom_bar(
+    stat = "identity",
+    position = "dodge"
+  ) +
+  labs(
+    title = "Adult Obesity Rates by Region in 2014",
+    x = "Region",
+    y = "Obesity Rate"
+  )
+  
+```
 
 ## Final Note
 
