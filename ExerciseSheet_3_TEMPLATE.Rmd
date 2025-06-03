@@ -145,6 +145,37 @@ b)  Inspect the film titles manually. Which films form a film series? A
     displays a list of the different series with the titles of the films
     and how many films belong to the series. Output the dataframe.
 
+Assigning each row a series:
+
+```{r}
+df_series <- pixar_film_clean %>%
+  mutate(series = case_when(
+    grepl("Toy Story", film) ~ "Toy Story",
+    grepl("Monsters", film) ~ "Monsters",
+    grepl("Finding", film) ~ "Finding",
+    grepl("Incredibles", film) ~ "Incredibles",
+    grepl("Cars", film) ~ "Cars",
+    TRUE ~ "None"
+  ))
+
+df_series %>%
+  print(n = 10)
+```
+
+Displaying series lists and number of films for each series:
+
+```{r}
+df_series <- df_series %>%
+  group_by(series) %>%
+  summarise(
+    films = paste(film, collapse = ", "),
+    number_films = n()
+  ) %>%
+  ungroup() %>%
+  filter(series != "None") %>%
+  print()
+```
+
 c)  Load the `public_response` dataframe into R. Convert the
     `cinema_score` variable into a factor while ensuring the factor
     levels are defined in ascending order, from the lowest to the
