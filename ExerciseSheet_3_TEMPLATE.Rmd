@@ -95,12 +95,48 @@ Link:
 
 For small datasets like these adding them to git is not a problem.
 
+```{r error=FALSE, message=FALSE}
+library("tidyverse")
+```
+
 a)  Load the `pixar_films` dataset into R. Clean the dataset by removing
     films without a title. Inspect the variable `film_rating`. What are
     the possible values and what do they mean? Create a factor variable
     for the film rating. Why is this appropriate?
 
-<!-- -->
+```{r}
+pixar_films <- read_csv("data/pixar_films.csv")
+
+pixar_film_clean <- pixar_films %>%
+  filter(!is.na(film))
+
+pixar_film_clean %>%
+  print(n = 10)
+```
+
+According to the respective Data Dictionary on GitHub, the variable
+`film_rating` represents the film rating based on the Motion Picture
+Association (MPA) film rating system.
+The possible values in this particular dataframe are:
+G - General Audiences (All ages admitted)
+PG - Parental Guidance Suggested (Some material may not be suitable for
+children)
+
+N/A values also appear, but these imply a missing value and don't have anything
+to do with the rating system.
+
+Creating a factor variable for the film rating:
+
+```{r}
+pixar_film_clean$film_rating_factor <- factor(pixar_film_clean$film_rating)
+
+pixar_film_clean %>%
+  print(n = 10)
+```
+
+Factor variables represent categorical values and the MPA film rating system
+inherently contains categories like G, PG, PG-13, etc. which makes it
+appropriate in this case.
 
 b)  Inspect the film titles manually. Which films form a film series? A
     film series can be identified by a common word in the titles of the
