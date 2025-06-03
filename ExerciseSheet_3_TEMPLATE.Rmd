@@ -105,12 +105,12 @@ a)  Load the `pixar_films` dataset into R. Clean the dataset by removing
     for the film rating. Why is this appropriate?
 
 ```{r}
-pixar_films <- read_csv("data/pixar_films.csv")
+df_pixar_films <- read_csv("data/pixar_films.csv")
 
-pixar_film_clean <- pixar_films %>%
+df_pixar_film_clean <- df_pixar_films %>%
   filter(!is.na(film))
 
-pixar_film_clean %>%
+df_pixar_film_clean %>%
   print(n = 10)
 ```
 
@@ -128,9 +128,9 @@ to do with the rating system.
 Creating a factor variable for the film rating:
 
 ```{r}
-pixar_film_clean$film_rating_factor <- factor(pixar_film_clean$film_rating)
+df_pixar_film_clean$film_rating_factor <- factor(df_pixar_film_clean$film_rating)
 
-pixar_film_clean %>%
+df_pixar_film_clean %>%
   print(n = 10)
 ```
 
@@ -148,7 +148,7 @@ b)  Inspect the film titles manually. Which films form a film series? A
 Assigning each row a series:
 
 ```{r}
-df_series <- pixar_film_clean %>%
+df_series <- df_pixar_film_clean %>%
   mutate(series = case_when(
     grepl("Toy Story", film) ~ "Toy Story",
     grepl("Monsters", film) ~ "Monsters",
