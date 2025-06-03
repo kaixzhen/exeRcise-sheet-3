@@ -107,10 +107,10 @@ a)  Load the `pixar_films` dataset into R. Clean the dataset by removing
 ```{r}
 df_pixar_films <- read_csv("data/pixar_films.csv")
 
-df_pixar_film_clean <- df_pixar_films %>%
+df_pixar_films_clean <- df_pixar_films %>%
   filter(!is.na(film))
 
-df_pixar_film_clean %>%
+df_pixar_films_clean %>%
   print(n = 10)
 ```
 
@@ -128,9 +128,12 @@ to do with the rating system.
 Creating a factor variable for the film rating:
 
 ```{r}
-df_pixar_film_clean$film_rating_factor <- factor(df_pixar_film_clean$film_rating)
+df_pixar_films_clean <- df_pixar_films_clean %>%
+  mutate(
+    film_rating_factor = factor(film_rating)
+  )
 
-df_pixar_film_clean %>%
+df_pixar_films_clean %>%
   print(n = 10)
 ```
 
@@ -148,7 +151,7 @@ b)  Inspect the film titles manually. Which films form a film series? A
 Assigning each row a series:
 
 ```{r}
-df_series <- df_pixar_film_clean %>%
+df_series <- df_pixar_films_clean %>%
   mutate(series = case_when(
     grepl("Toy Story", film) ~ "Toy Story",
     grepl("Monsters", film) ~ "Monsters",
@@ -181,6 +184,30 @@ c)  Load the `public_response` dataframe into R. Convert the
     levels are defined in ascending order, from the lowest to the
     highest score. Combine `public_response` with the `pixar_films`
     dataset using an appropriate merge variable.
+
+Refactoring `cinema_score` variable:
+    
+```{r}
+df_public_response <- read_csv("data/public_response.csv")
+
+df_public_response <- df_public_response %>%
+  mutate(
+    cinema_score = fct_relevel(cinema_score, "A-", "A", "A+")
+  )
+
+df_public_response %>%
+  print(n = 10)
+```
+
+Combining both datasets using `film` variable:
+
+```{r}
+df_pixar_films_with_reponse <- df_public_response %>%
+  right_join(df_pixar_films_clean, by="film")
+
+df_pixar_films_with_reponse %>%
+  print(n = 10)
+```
 
 d)  Choose one of the variables representing the public response and
     create a bar plot for the films belonging to a series. Here are the
