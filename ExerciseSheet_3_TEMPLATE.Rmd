@@ -223,6 +223,48 @@ d)  Choose one of the variables representing the public response and
 
     What do you notice when comparing the scores of the films in a
     series? Do you see any patterns?
+    
+Creating an appropriate dataframe:
+
+```{r}
+df_pixar_series_with_reponse <- df_pixar_films_with_reponse %>%
+  mutate(
+    series = case_when(
+    grepl("Toy Story", film) ~ "Toy Story",
+    grepl("Monsters", film) ~ "Monsters",
+    grepl("Finding", film) ~ "Finding",
+    grepl("Incredibles", film) ~ "Incredibles",
+    grepl("Cars", film) ~ "Cars",
+    TRUE ~ "None"),
+    film = fct_reorder(film, release_date)
+    ) %>%
+  filter (series != "None")
+  
+```
+
+Creating the bar plot:
+
+```{r}
+ggplot(
+  data = df_pixar_series_with_reponse,
+  mapping = aes(
+    x = series,
+    y = rotten_tomatoes,
+    fill = film
+  )
+) +
+  geom_bar(
+    stat = "identity",
+    position = "dodge"
+  ) +
+  labs(
+    title = "Rotten Tomatoes Scores of Pixar Films by Series",
+    x = "Film Series",
+    y = "Rotten Tomatoes Score"
+  )
+```
+When comparing the scores of the films in a series, sequels in general tend to
+score worse than their predecessors.
 
 ## Exercise 4: Open Analysis (4 points)
 
