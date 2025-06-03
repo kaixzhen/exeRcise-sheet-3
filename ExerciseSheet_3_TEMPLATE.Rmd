@@ -298,6 +298,30 @@ e)  Use R to answer your chosen question. Please limit your analysis to
     the functions and techniques we have covered so far in the course.
     You are **not expected** to use advanced statistical models or
     external packages which haven't been introduced.
+
+As the most recent year of the dataset is 2014, we will focus on data from that
+year:
+  
+```{r}
+df_adult_obesity_rates <- read_csv("data/adult_obesity.csv") %>%
+  janitor::clean_names() %>%
+  rename(
+    adult_obesity_rate = prevalence_of_obesity_in_adults_18_years_old_fao_2017
+  )
+
+df_adult_obesity_rates_2014 <- df_adult_obesity_rates %>%
+  filter(year == 2014)
+```
+
+The region(s) with the highest adult obesity rates in 2014 were North America
+and Europe (27.7), with Oceania being a close second (27.5).
+The region with by far the lowest adult obesity rate in 2014 was Asia.
+With the global adult obesity rate being 12.8 in 2014, the regions with the
+highest adult obesity rates more than doubled the global rate, while obesity
+rate in Asia was a little over a half of the global rate.
+This strongly suggests that regional differences in lifestyle and culture have a
+significant impact on adult obesity rates.
+
 f)  Create a meaningful plot / figure with the dataset. Make sure to
     provide a figure caption (via the chunk options / Rmarkdown) and
     correctly label the figure.
